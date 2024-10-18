@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>User Registration</title>
+
+  <!-- Font Icon -->
+  <link rel="stylesheet"
+    href="../Assets/Templates/Registeration/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+  <!-- Main css -->
+  <link rel="stylesheet" href="../Assets/Templates/Registeration/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    figure {
+      display: flex !important;
+      width: auto;
+      height: auto;
+    }
+
+    input,
+    select,
+    option {
+      padding: 6px 40px;
+      color: #999;
+    }
+
+    .main {
+      padding: 20px 0 !important;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .form-group i {
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      color: #000;
+    }
+
+    /* CSS */
+    .custom-file-upload {
+      position: relative;
+      display: inline-block;
+      height: 50px;
+    }
+
+    .upload-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #494a4b;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      width: 200px;
+    }
+
+    .upload-btn:hover {
+      background-color: #000000;
+    }
+
+    #fle_photo,
+    #fle_proof {
+      position: absolute;
+      font-size: 100px;
+      opacity: 0;
+      right: 0;
+      top: 0;
+    }
+
+    .main {
+      padding: 20px 0 !important;
+    }
+
+    .form-button {
+      display: flex;
+      justify-content: start;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main">
+
+    <!-- Sign up form -->
+    <section class="signup">
+      <div class="container">
+        <div class="signup-content">
+          <div class="signup-form">
+            <h2 class="form-title">Add Book</h2>
+            <form method="POST" class="register-form" id="register-form" enctype="multipart/form-data">
+              <div class="form-group">
+                <i class="fa fa-book-open"></i>
+                <input required type="text" name="txt_name" id="txt_name" placeholder="Name" />
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-book"></i>
+                <input required type="text" name="txt_email" id="txt_email" placeholder="ISBN" />
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-file-text"></i>
+                <input required type="textarea" name="txt_address" id="txt_address" placeholder="Description" />
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-view-list"></i>
+                <select name="lst_district" id="lst_district" onChange="getGenre(this.value)" required>
+                  <option>Category</option>
+                  <?php
+                    $dissel = "select * from tbl_category";
+                    $result=$con->query($dissel);
+                    while($data = $result->fetch_assoc()){
+                  ?>
+                  <option value="<?php echo $data['cat_id'] ?>">
+                    <?php echo $data['cat_name'] ?>
+                  </option>
+                  <?php
+                    }
+                  ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-label"></i>
+                <select name="lst_genre" id="sel_place" required>
+                  <option>Genre</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-money"></i>
+                <input required type="text" name="txt_contact" id="txt_contact" placeholder="Price" />
+              </div>
+              <div class="form-group">
+                <i class="zmdi zmdi-money"></i>
+                <input required type="text" name="txt_pass" id="txt_pass" placeholder="Ebook Price" />
+              </div>
+              <!-- Radio -->
+              <div class="form-group">
+                <div class="radobuttons" style="display: flex;justify-content: space-between;">
+                  <input type="radio" name="agree-term" id="agree-term" class="agree-term" />
+                  <label for="agree-term" class="label-agree-term"><span><span></span></span>Physical</label>
+
+                  <input type="radio" name="agree-term" id="agree-term" class="agree-term" />
+                  <label for="agree-term" class="label-agree-term"><span><span></span></span>Ebook</label>
+
+                  <input type="radio" name="agree-term" id="agree-term" class="agree-term" />
+                  <label for="agree-term" class="label-agree-term"><span><span></span></span>Both</label>
+
+                  <input type="radio" name="agree-term" id="agree-term" class="agree-term" />
+                  <label for="agree-term" class="label-agree-term"><span><span></span></span>Free</label>
+                </div>
+              </div>
+              <div class="form-group form-button">
+                <input type="submit" name="btn_register" id="btn_register" class="form-submit" value="Add" />
+              </div>
+            </form>
+          </div>
+          <div class="signup-image">
+            <figure>
+              <img src="../Assets/Templates/Registeration/images/lib.jpg" alt="sing up image">
+            </figure>
+            <div class="form-group">
+              <div class="custom-file-upload">
+                <label for="fle_photo" class="upload-btn" id="upload-label">Upload Book Cover</label>
+                <input type="file" name="fle_photo" id="fle_photo" accept="image/png,image/jpeg"
+                  onchange="updateLabel(this)" />
+                <br>
+                <br>
+                <p id="File"></p>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="custom-file-upload">
+                <label for="fle_proof" class="upload-btn" id="upload-label1">Upload Book</label>
+                <input type="file" name="fle_proof" id="fle_proof" accept="image/png,image/jpeg"
+                  onchange="updateLabel2(this)" />
+                <br>
+                <br>
+                <p id="File2"></p>
+              </div>
+            </div>
+            <!--<a href="Login.php" class="signup-image-link">I am already member</a>-->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- JS -->
+  <script src="../Assets/Templates/Registeration/vendor/jquery/jquery.min.js"></script>
+  <script src="../Assets/Templates/Registeration/js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+
+<script src="../Assets/JQ/jQuery.js"></script>
+<script>
+  function getGenre(did) {
+    console.log(did);
+    $.ajax({
+      url: "../Assets/AjaxPages/AjaxGenre.php?did=" + did,
+      success: function (result) {
+
+        $("#lst_genre").html(result);
+        console.log(result);
+      }
+    });
+  }
+
+  // JavaScript(File upload label)
+  function updateLabel(input2) {
+    var label1 = document.getElementById('upload-label');
+    var filelabel1 = document.getElementById('File');
+    if (input2.files.length > 0) {
+      label1.textContent = "Book Cover Uploaded";
+      filelabel1.innerHTML = input2.files[0].name;
+    } else {
+      label1.textContent = 'Upload Book Cover';
+    }
+  }
+
+  function updateLabel2(input) {
+    var label = document.getElementById('upload-label1');
+    var filelabel = document.getElementById('File2');
+    if (input.files.length > 0) {
+      label.textContent = "Book Uploaded";
+      filelabel.innerHTML = input.files[0].name;
+    } else {
+      label.textContent = 'Upload Book';
+    }
+  }
+
+</script>
+
+</html>
